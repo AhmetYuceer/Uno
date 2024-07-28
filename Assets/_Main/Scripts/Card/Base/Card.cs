@@ -1,7 +1,7 @@
 using UnityEngine;
 public abstract class Card : MonoBehaviour
 {
-    public CardColorEnum CardColor { get; set; }
-    public CardTypeEnum CardTypeEnum { get; set; }
+    public CardColorEnum CardColor;
+    public CardTypeEnum CardTypeEnum;
     public virtual void PlayCard() {}
 }
