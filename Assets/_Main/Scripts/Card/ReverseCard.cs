@@ -2,6 +2,6 @@
 {
     public override void PlayCard()
     {
-        //Tur tersine döndü
+        GameManager.Instance.TurnManager.ReverseTurn();
     }
 }
