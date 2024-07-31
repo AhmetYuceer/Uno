@@ -2,7 +2,6 @@
 
 public class RealPlayer : Player
 {
-
     public override void Move(Card card)
     {
         if (!MyTurn)

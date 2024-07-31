@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Stack<Card> DroppedCards = new Stack<Card>();
     public List<Player> Players = new List<Player>();
 
     public CardManager CardManager { get; private set; }

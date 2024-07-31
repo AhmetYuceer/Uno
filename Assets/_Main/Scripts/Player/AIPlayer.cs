@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class AIPlayer : Player
 {
@@ -21,8 +21,8 @@ public class AIPlayer : Player
 
     public IEnumerator PlayTurn()
     {
-        //AI kart seçer ve Oynar
         yield return new WaitForSeconds(_moveDelay);
+        //AI kart seçer ve Oynar
     }
 
     public override void Move(Card card)
