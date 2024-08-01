@@ -1,12 +1,14 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class DeckManager : MonoBehaviour
 {
     public static DeckManager Instance;
-    private Stack<Card> _deck;
 
+    public Transform DroppedCardsTranform;
+    public Stack<Card> _deck;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -20,11 +22,20 @@ public class DeckManager : MonoBehaviour
         Shuffle(cards);
         _deck = new Stack<Card>(cards);
     }
-
+    
     public Card GetCard()
     {
         Card card = _deck.Pop();
         return card;
+    }
+
+    public void PutCardBackOfDeck(Card card)
+    {
+        Stack<Card> temp = _deck;
+        temp.Reverse();
+        temp.Push(card);
+        temp.Reverse();
+        _deck = temp;
     }
 
     public void Shuffle<T>(List<T> list)

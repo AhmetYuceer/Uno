@@ -223,9 +223,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &262413010 stripped
+--- !u!4 &415119919 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 9201293729160230894, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6626067207735163548, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
   m_PrefabInstance: {fileID: 2910747233194919459}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &443775391
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cardPrebaf: {fileID: 2553745046064533287, guid: 4b13838564a3eeb40a577ed2dda2a9a8, type: 3}
-  _deckParentTransform: {fileID: 262413010}
+  _deckParentTransform: {fileID: 415119919}
 --- !u!1 &487235590
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,9 +499,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e045c1471ad3e949bfe295c2cfaa65a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardManager: {fileID: 0}
-  DeckManager: {fileID: 0}
-  TurnManager: {fileID: 0}
   Players:
   - {fileID: 683567185}
   - {fileID: 841442075}
@@ -637,6 +634,7 @@ Transform:
   - {fileID: 578044838}
   - {fileID: 443775392}
   - {fileID: 487235591}
+  - {fileID: 2063963038}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &841442072 stripped
@@ -706,6 +704,50 @@ Transform:
   - {fileID: 1503353771}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2063963037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2063963038}
+  - component: {fileID: 2063963039}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2063963038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063963037}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 771134716}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2063963039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063963037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4809ba955bd61af45ab7d600e0688767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &842271993473612866
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -832,6 +874,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deck
       objectReference: {fileID: 0}
+    - target: {fileID: 7703253025729040476, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b65ff8532cf10f9418454c1c1acf7344, type: 3}
+    - target: {fileID: 7703253025729040476, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2599235
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703253025729040476, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+      propertyPath: m_Color.g
+      value: 0.2599235
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703253025729040476, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+      propertyPath: m_Color.r
+      value: 0.9339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703253025729040476, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703253025729040476, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6430f8c4993e6d748b764c87d77661fe, type: 2}
     - target: {fileID: 9201293729160230894, guid: e8f5ccc346b0fb342b725d8cbe66914b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.5

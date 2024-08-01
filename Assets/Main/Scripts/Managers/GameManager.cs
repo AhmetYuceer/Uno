@@ -1,16 +1,16 @@
 using UnityEngine; 
+using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
-    public Stack<Card> DroppedCards = new Stack<Card>();
     public List<Player> Players = new List<Player>();
 
     public CardManager CardManager { get; private set; }
     public DeckManager DeckManager { get; private set; }
     public TurnManager TurnManager { get; private set; }
+    public DiscardPile DiscardPile { get; private set; }
 
     private void Awake()
     {
@@ -25,18 +25,32 @@ public class GameManager : MonoBehaviour
         CardManager = CardManager.Instance;
         DeckManager = DeckManager.Instance;
         TurnManager = TurnManager.Instance;
-     
+        DiscardPile = DiscardPile.Instance;
+
         CardManager.SetupUnoClassic();
         DeckManager.SetDeck(CardManager.Cards);
+        DiscardPile.SetManager(DeckManager.DroppedCardsTranform, CardManager.Cards.Count);
 
         StartGame();
     }
 
     private void StartGame()
     {
+        SetPlayers();
+        DealCards();
+        StartTurn();
+    }
+
+    #region Game States
+
+    private void SetPlayers()
+    {
         foreach (var player in Players)
             TurnManager.AddPlayer(player);
+    }
 
+    private void DealCards()
+    {
         foreach (var player in Players)
         {
             for (int i = 0; i < 7; i++)
@@ -45,7 +59,24 @@ public class GameManager : MonoBehaviour
                 player.AddCard(card);
             }
         }
-
-        TurnManager.StartTurn();
     }
+
+    private void StartTurn()
+    {
+        Card card = DeckManager.GetCard();
+        
+        if (card.CardTypeEnum == CardTypeEnum.WILD || card.CardTypeEnum == CardTypeEnum.WILD_DRAW)
+        {
+            DeckManager.PutCardBackOfDeck(card);
+            Debug.Log($"{card.CardTypeEnum} : {card.name}");
+            StartTurn();
+        }
+        else
+        {
+            StartCoroutine(DiscardPile.DropCard(card));
+            TurnManager.StartTurn();
+        }
+    }
+
+    #endregion
 }

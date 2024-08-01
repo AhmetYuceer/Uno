@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AIPlayer : Player
 {
+    private const float OFFSET = 1f;
     private float _moveDelay = 1f;
 
     public override bool MyTurn 
@@ -13,16 +14,26 @@ public class AIPlayer : Player
             base.MyTurn = value;
 
             if (base.MyTurn)
-            {
                 StartCoroutine(PlayTurn());
-            } 
         }    
+    }
+
+    public override void AddCard(Card card)
+    {
+        Offset = OFFSET;
+        base.AddCard(card);
     }
 
     public IEnumerator PlayTurn()
     {
         yield return new WaitForSeconds(_moveDelay);
-        //AI kart seçer ve Oynar
+        MyTurn = false;
+
+        if (SelectableCards.Count > 0)
+        {
+            PlayCard(SelectableCards[0]);
+            StartCoroutine(GameManager.Instance.TurnManager.NextPlayer());
+        }
     }
 
     public override void Move(Card card)
