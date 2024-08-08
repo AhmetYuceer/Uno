@@ -3,19 +3,64 @@ using System.Collections;
 
 public class AIPlayer : Player
 {
+    private bool _isDrawn;
     private const float OFFSET = 1f;
-    private float _moveDelay = 1f;
+    private float _moveDelay = 2f;
 
     public override bool MyTurn 
     { 
-        get => base.MyTurn;
         set
         {
             base.MyTurn = value;
+            
+            if (MyTurn)
+            {
+                if (IsDraw)
+                {
+                    IsDraw = false;
+                }
+                else if (IsSkip)
+                {
+                    IsSkip = false;
+                }
+                else
+                {
+                    StartCoroutine(PlayTurn());
+                }
+            } 
+        }
+    }
 
-            if (base.MyTurn)
-                StartCoroutine(PlayTurn());
-        }    
+    public IEnumerator PlayTurn()
+    {
+        CardViewer.StopShowingCard();
+        yield return new WaitForSeconds(_moveDelay);
+        PlayerAction();
+    }
+    
+    public void PlayerAction()
+    {
+        SetSelectableCards();
+
+        if (SelectableCards.Count > 0)
+        {
+            int rndIndex = Random.Range(0, SelectableCards.Count);
+            
+            Card card = SelectableCards[rndIndex];
+            Cards.Remove(card);
+
+            DiscardCard(card);
+        }
+        else if (!_isDrawn)
+        {
+            _isDrawn = true;
+            DrawCard();
+        }
+        else
+        {
+            _isDrawn = false;
+            TurnManager.NextTurn(this);
+        }
     }
 
     public override void AddCard(Card card)
@@ -24,24 +69,15 @@ public class AIPlayer : Player
         base.AddCard(card);
     }
 
-    public IEnumerator PlayTurn()
+    public override void DiscardCard(Card card)
     {
-        yield return new WaitForSeconds(_moveDelay);
-        MyTurn = false;
-
-        if (SelectableCards.Count > 0)
-        {
-            PlayCard(SelectableCards[0]);
-            StartCoroutine(GameManager.Instance.TurnManager.NextPlayer());
-        }
+        StartCoroutine(GameManager.Instance.DiscardPile.DiscardCard(card, this));
     }
 
-    public override void Move(Card card)
+    public override void DrawCard()
     {
-        if (!MyTurn)
-            return;
-
-        MyTurn = false;
-        StartCoroutine(GameManager.Instance.TurnManager.NextPlayer());
+        Card card = GameManager.Instance.DeckManager.GetCard();
+        AddCard(card);
+        PlayerAction();
     }
 }

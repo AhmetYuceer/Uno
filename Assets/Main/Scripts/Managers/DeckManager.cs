@@ -7,7 +7,7 @@ public class DeckManager : MonoBehaviour
     public static DeckManager Instance;
 
     public Transform DroppedCardsTranform;
-    public Stack<Card> _deck;
+    private Stack<Card> _deck;
     
     private void Awake()
     {
@@ -26,16 +26,17 @@ public class DeckManager : MonoBehaviour
     public Card GetCard()
     {
         Card card = _deck.Pop();
+        card.gameObject.SetActive(true);
         return card;
     }
 
     public void PutCardBackOfDeck(Card card)
     {
-        Stack<Card> temp = _deck;
+        Stack<Card> temp = new Stack<Card>(_deck);
         temp.Reverse();
         temp.Push(card);
         temp.Reverse();
-        _deck = temp;
+        _deck = new Stack<Card>(temp);
     }
 
     public void Shuffle<T>(List<T> list)

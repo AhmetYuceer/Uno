@@ -1,73 +1,61 @@
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic; 
 
-public class TurnManager : MonoBehaviour
+public static class TurnManager
 {
-    public static TurnManager Instance;
-    private List<Player> _players = new List<Player>();
-    private TurnDirectionEnum _turnDirection;
-    private int _nextPlayerIndex;
+    private static List<Player> _players = new List<Player>();
+    public static TurnDirectionEnum TurnDirection { get; private set; }
 
-    private void Awake()
+    public static void StartTurn()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        TurnDirection = TurnDirectionEnum.RIGHT;
+        _players[0].MyTurn = true;
     }
 
-    public void StartTurn()
-    {
-        _nextPlayerIndex = 0;
-        _turnDirection = TurnDirectionEnum.RIGHT;
-        _players[_nextPlayerIndex].MyTurn = true;
-    }
-
-    public void AddPlayer(Player player)
+    public static void AddPlayer(Player player)
     {
         _players.Add(player);
     }
-
-    public void ReverseTurn()
+ 
+    public static void ReverseDirection()
     {
-        switch (_turnDirection)
+        switch (TurnDirection)
         {
-            case TurnDirectionEnum.RIGHT:
-                _turnDirection = TurnDirectionEnum.LEFT;
-                break;
             case TurnDirectionEnum.LEFT:
-                _turnDirection = TurnDirectionEnum.RIGHT;
+                TurnDirection = TurnDirectionEnum.RIGHT;
+                break;
+            case TurnDirectionEnum.RIGHT:
+                TurnDirection = TurnDirectionEnum.LEFT;
                 break;
         }
-
-        _players[_nextPlayerIndex].MyTurn = false;
-        StartCoroutine(NextPlayer());
     }
 
-    public IEnumerator NextPlayer()
+    public static void NextTurn(Player currentPlayer)
     {
-        yield return null;
+        Player nextPlayer = GetNextPlayerIndex(currentPlayer);
+        currentPlayer.MyTurn = false;
+        nextPlayer.MyTurn = true;
+    }
 
-        switch (_turnDirection)
+    public static Player GetNextPlayerIndex(Player currentPlayer)
+    {
+        int playerIndex = _players.IndexOf(currentPlayer);
+
+        switch (TurnDirection)
         {
             case TurnDirectionEnum.RIGHT:
-                _nextPlayerIndex++;
+                playerIndex++;
                 break;
             case TurnDirectionEnum.LEFT:
-                _nextPlayerIndex--;
+                playerIndex--;
                 break;
         }
 
-        if (_nextPlayerIndex > _players.Count -1)
-        {
-            _nextPlayerIndex = 0;
-        }
-        else if (_nextPlayerIndex <= -1)
-        {
-            _nextPlayerIndex = _players.Count - 1;
-        }
-
-        _players[_nextPlayerIndex].MyTurn = true;
+        if (playerIndex > _players.Count - 1)
+            playerIndex = 0;
+        else if (playerIndex <= -1)
+            playerIndex = _players.Count - 1;
+        
+        return _players[playerIndex];
     }
+
 }

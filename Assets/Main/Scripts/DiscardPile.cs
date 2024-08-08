@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class DiscardPile : MonoBehaviour
 {
     public static DiscardPile Instance;
 
-    private Transform _droppedCardsTranform;
-    private Stack<Card> _droppedCards;
+    private Transform _discardedCardsTranform;
+    private Stack<Card> _discardedCards;
 
     private void Awake()
     {
@@ -19,16 +20,43 @@ public class DiscardPile : MonoBehaviour
  
     public void SetManager(Transform droppedCardsTranform , int droppedCardCapacity)
     {
-        _droppedCardsTranform = droppedCardsTranform;
-        _droppedCards = new Stack<Card>(droppedCardCapacity);
+        _discardedCardsTranform = droppedCardsTranform;
+        _discardedCards = new Stack<Card>(droppedCardCapacity);
     }
 
-    public IEnumerator DropCard(Card card)
+    public IEnumerator DiscardCard(Card card, Player player)
     {
-        card.transform.rotation = Quaternion.identity;
-        _droppedCards.Push(card);
+        yield return new WaitForSeconds(1f);
 
-        List<Card> temp = new List<Card>(_droppedCards);
+        _discardedCards.Push(card);
+        SortDiscardedCardList();
+        
+        card.IsShowable = true;
+        card.TurnFront();
+        card.LookAtCard();
+
+        yield return new WaitForSeconds(1f);
+        DiscardAnimation(card);
+
+        if (player != null)
+        {
+            card.ApplyAction(player);
+            StartCoroutine(player.ArrangeTheCards());
+        }
+    }
+
+    private void DiscardAnimation(Card card)
+    {
+        card.StopLookingCard();
+        card.transform.SetParent(_discardedCardsTranform);
+        card.transform.localRotation = Quaternion.identity;
+        card.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        card.transform.DOLocalMove(Vector3.zero, 0.5f);
+    }
+
+    private void SortDiscardedCardList()
+    {
+        List<Card> temp = new List<Card>(_discardedCards);
         temp.Reverse();
 
         for (int i = 0; i < temp.Count; i++)
@@ -40,17 +68,10 @@ public class DiscardPile : MonoBehaviour
 
             temp[i].GetCardBorderSpriteRenderer().sortingOrder = temp[i].GetCardSpriteRenderer().sortingOrder - 1;
         }
-
-        card.TurnFront();
-        card.transform.SetParent(_droppedCardsTranform);
-        card.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-        card.transform.localPosition = Vector3.zero;
-
-        yield return new WaitForSeconds(1f);
     }
 
     public Card GetLastDiscardedCard()
     {
-        return _droppedCards.Peek();
+        return _discardedCards.Peek();
     }
 }

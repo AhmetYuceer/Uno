@@ -1,8 +1,9 @@
 ﻿public class NormalCard : Card
 {
     public CardFaceValueEnum FaceValue;
-    public override void PlayCard()
+
+    public override void ApplyAction(Player player)
     {
-        //Kart masaya konuldu
+        TurnManager.NextTurn(player);
     }
 }

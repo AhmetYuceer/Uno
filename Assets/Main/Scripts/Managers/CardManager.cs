@@ -180,6 +180,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < cardCount; i++)
         {
             GameObject spawnedCard = Instantiate(_cardPrebaf, _deckParentTransform);
+            spawnedCard.SetActive(false);
             spawnedCards[i] = spawnedCard;
         }
         return spawnedCards;

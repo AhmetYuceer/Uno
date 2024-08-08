@@ -1,4 +1,5 @@
-﻿using UnityEngine; 
+﻿using System.Collections;
+using UnityEngine; 
 
 public class RealPlayer : Player
 {
@@ -11,22 +12,29 @@ public class RealPlayer : Player
         {
             base.MyTurn = value;
 
+            if (MyTurn)
+            {
+                SetSelectableCards();
+                StartCoroutine(ShowSelectableCards());
+            }
+        }
+    }
+
+    private IEnumerator ShowSelectableCards()
+    {
+        yield return null;
+        foreach (var card in Cards)
+        {
+            if (card.IsSelectable)
+                card.transform.localPosition = new Vector3(card.transform.localPosition.x, card.transform.localPosition.y + 1, card.transform.localPosition.z);
         }
     }
 
     public override void AddCard(Card card)
     {
         Offset = OFFSET;
-        card.TurnFront();
+        card.IsShowable = true;
+        
         base.AddCard(card);
-    }
-
-    public override void Move(Card card)
-    {
-        if (!MyTurn)
-            return;
-
-        MyTurn = false;
-        StartCoroutine(GameManager.Instance.TurnManager.NextPlayer());
     }
 }

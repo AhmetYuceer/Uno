@@ -1,7 +1,8 @@
 ﻿public class ReverseCard : Card
 {
-    public override void PlayCard()
+    public override void ApplyAction(Player player)
     {
-        GameManager.Instance.TurnManager.ReverseTurn();
+        TurnManager.ReverseDirection();
+        TurnManager.NextTurn(player);
     }
 }

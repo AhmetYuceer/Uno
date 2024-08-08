@@ -1,28 +1,55 @@
 using UnityEngine;
+using DG.Tweening;
+
 public abstract class Card : MonoBehaviour
 {
     public bool IsSelectable;
+    public bool IsShowable;
 
     public CardColorEnum CardColor;
     public CardTypeEnum CardTypeEnum;
 
     private SpriteRenderer _cardSpriteRenderer;
-    SpriteRenderer _cardBorderSpriteRenderer;
+    private SpriteRenderer _cardBorderSpriteRenderer;
     private Sprite _frontSprite;
     private Sprite _backSprite;
 
-    [Header("Card Select Settings")]
+    [Header("Card Look at Settings")]
     private bool _isRayHitting;
-    private Vector3 _defaultScale = Vector3.one;
     private int _defaultOrderValue;
     private int _defaultChildOrderValue;
     private int _maxOrderValue = 10000;
+    private Vector3 _defaultScale = Vector3.one;
+    private Vector3 _lookedScaleSize = new Vector3(1.5f, 1.5f, 1.5f);
 
-    public virtual void PlayCard() {}
+    [Header("Drag And Drop")]
+    private Vector3 _previosPosition;
 
+    public virtual void ApplyAction(Player player) { }
+
+    private void OnMouseDown()
+    {
+        _previosPosition = transform.position;
+    }
+
+    private void OnMouseDrag()
+    {
+        if (_isRayHitting && IsSelectable && IsShowable)
+        {
+            var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = new Vector2(pos.x, pos.y);
+        }
+    }
+
+    private void OnMouseUp()
+    {
+        transform.position = _previosPosition;
+        StopLookingCard();
+    }
+  
     public void LookAtCard()
     {
-        if (!_isRayHitting)
+        if (!_isRayHitting && IsShowable)
         {
             _isRayHitting = true;
             _defaultScale = transform.GetChild(0).localScale;
@@ -32,7 +59,7 @@ public abstract class Card : MonoBehaviour
             _cardSpriteRenderer.sortingOrder = _maxOrderValue;
             _cardBorderSpriteRenderer.sortingOrder = _maxOrderValue - 1;
 
-            transform.GetChild(0).localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            LookAnimation(transform.GetChild(0).transform, _lookedScaleSize);
         }
     }
 
@@ -44,9 +71,14 @@ public abstract class Card : MonoBehaviour
 
             _cardSpriteRenderer.sortingOrder = _defaultOrderValue;
             _cardBorderSpriteRenderer.sortingOrder = _defaultChildOrderValue;
-            
-            transform.GetChild(0).localScale = _defaultScale;
+
+            LookAnimation(transform.GetChild(0).transform, _defaultScale);
         }
+    }
+
+    private void LookAnimation(Transform childTransform, Vector3 size)
+    {
+        childTransform.DOScale(size, 0.5f);
     }
 
     public void SetSprite(Sprite frontSprite, Sprite backSprite)

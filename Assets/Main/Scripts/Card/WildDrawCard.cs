@@ -1,8 +1,26 @@
 ﻿public class WildDrawCard : Card
 {
     private const int DRAW_VALUE = 4;
-    public override void PlayCard()
+    
+    public override void ApplyAction(Player player)
     {
-        //Sonraki oyuncuya 4 kart çektir ve turunu atlat
+        Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
+        nextPlayer.IsDraw = true;
+        player.MyTurn = false;
+
+        if (nextPlayer.GetType() == typeof(AIPlayer))
+        {
+            for (int i = 0; i < DRAW_VALUE; i++)
+            {
+                Card card = GameManager.Instance.DeckManager.GetCard();
+                nextPlayer.AddCard(card);
+            }
+            TurnManager.NextTurn(nextPlayer);
+        }
+        else
+        {
+            // UI arayüzünü aç
+        }
     }
+
 }

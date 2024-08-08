@@ -1,7 +1,10 @@
 ﻿public class SkipCard : Card
 {
-    public override void PlayCard()
+    public override void ApplyAction(Player player)
     {
-        //Sonraki oyuncunun sırası atlandı
+        player.MyTurn = false;
+        Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
+        nextPlayer.IsSkip = true;
+        TurnManager.NextTurn(nextPlayer);
     }
 }

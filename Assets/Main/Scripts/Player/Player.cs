@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
+using System.Collections;
+using DG.Tweening;
 
 public abstract class Player : MonoBehaviour
 {
+    public bool IsDraw, IsSkip;
+
     public List<Card> Cards = new List<Card>();
     public List<Card> SelectableCards = new List<Card>();
 
@@ -37,25 +40,30 @@ public abstract class Player : MonoBehaviour
             }
         }
     }
-    
-    public virtual void Move(Card card) { }
-
+ 
+    public virtual void DrawCard() { }
+    public virtual void DiscardCard(Card card) { }
     public virtual void AddCard(Card card)
     {
-        card.gameObject.transform.SetParent(CardsParentTransform);
         Cards.Add(card);
-        ArrangeTheCards();
+        card.transform.SetParent(CardsParentTransform);
+        card.transform.localRotation = Quaternion.identity;
+        AnimationAddCard(card);
     }
 
-    public void PlayCard(Card card)
+    public void AnimationAddCard(Card card)
     {
-        StartCoroutine(GameManager.Instance.DiscardPile.DropCard(card));
-        Cards.Remove(card);
-        ArrangeTheCards();
+        card.transform.DOLocalMove(Vector3.zero, 0.5f).OnComplete(() =>
+        {
+            if (GetType() == typeof(RealPlayer))
+                card.TurnFront();
+        });
     }
-    
+
     public void SetSelectableCards()
     {
+        SelectableCards.Clear();
+
         Card lastDiscardedCard = GameManager.Instance.DiscardPile.GetLastDiscardedCard();
         List<WildDrawCard> wildDrawCards = new List<WildDrawCard>();
 
@@ -63,54 +71,42 @@ public abstract class Player : MonoBehaviour
         {
             if (lastDiscardedCard.CardColor == card.CardColor)
             {
-                card.IsSelectable = true;
-                SelectableCards.Add(card);
+                SetSelectableCard(card);
             }
             else
             {
-                switch (card.CardTypeEnum)
+                if (card.CardTypeEnum == CardTypeEnum.WILD || card.CardTypeEnum == CardTypeEnum.WILD_DRAW)
                 {
-                    case CardTypeEnum.NORMAL:
-                        if (lastDiscardedCard.CardTypeEnum == card.CardTypeEnum)
-                        {
+                    switch (card.CardTypeEnum)
+                    {
+                        case CardTypeEnum.WILD:
+                            SetSelectableCard(card);
+                            break;
+                        case CardTypeEnum.WILD_DRAW:
+                            wildDrawCards.Add((WildDrawCard)card);
+                            break;
+                    }
+                }
+                else if (lastDiscardedCard.CardTypeEnum == card.CardTypeEnum)
+                {
+                    switch (card.CardTypeEnum)
+                    {
+                        case CardTypeEnum.NORMAL:
                             NormalCard normalCard = (NormalCard)card;
                             NormalCard discaredNormalCard = (NormalCard)lastDiscardedCard;
-
                             if (discaredNormalCard.FaceValue == normalCard.FaceValue)
-                            {
-                                card.IsSelectable = true;
-                                SelectableCards.Add(card);
-                            }
-                        }
-                        break;
-                    case CardTypeEnum.DRAW:
-                        if (lastDiscardedCard.CardTypeEnum == card.CardTypeEnum)
-                        {
-                            card.IsSelectable = true;
-                            SelectableCards.Add(card);
-                        }
-                        break;
-                    case CardTypeEnum.REVERSE:
-                        if (lastDiscardedCard.CardTypeEnum == card.CardTypeEnum)
-                        {
-                            card.IsSelectable = true;
-                            SelectableCards.Add(card);
-                        }
-                        break;
-                    case CardTypeEnum.SKIP:
-                        if (lastDiscardedCard.CardTypeEnum == card.CardTypeEnum)
-                        {
-                            card.IsSelectable = true;
-                            SelectableCards.Add(card);
-                        }
-                        break;
-                    case CardTypeEnum.WILD:
-                        card.IsSelectable = true;
-                        SelectableCards.Add(card);
-                        break;
-                    case CardTypeEnum.WILD_DRAW:
-                        wildDrawCards.Add((WildDrawCard)card);
-                        break;
+                                SetSelectableCard(card);
+                            break;
+                        case CardTypeEnum.DRAW:
+                            SetSelectableCard(card);
+                            break;
+                        case CardTypeEnum.REVERSE:
+                            SetSelectableCard(card);
+                            break;
+                        case CardTypeEnum.SKIP:
+                            SetSelectableCard(card);
+                            break;
+                    }
                 }
             }
         }
@@ -118,33 +114,29 @@ public abstract class Player : MonoBehaviour
         if (wildDrawCards.Count > 0 && SelectableCards.Count == 0)
         {
             foreach (var wildDrawCard in wildDrawCards)
-            {
-                wildDrawCard.IsSelectable = true;
-                SelectableCards.Add(wildDrawCard);
-            }
-        }
-
-        foreach (var card in Cards)
-        {
-            if (card.IsSelectable)
-            {
-                card.transform.localPosition = new Vector3(0, 2,0);
-                card.TurnFront();
-            }
+                SetSelectableCard(wildDrawCard);
         }
     }
 
-    private void ArrangeTheCards()
+    private void SetSelectableCard(Card card)
     {
+        card.IsSelectable = true;
+        SelectableCards.Add(card);
+    }
+
+    public IEnumerator ArrangeTheCards()
+    {
+        yield return null;
+
         foreach (var card in Cards)
         {
             card.GetComponent<Transform>().localRotation = Quaternion.identity;
             card.GetComponent<Transform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
-
-        if (Cards.Count > 7)
+      
+        if (Cards.Count >= 10)
         {
-            float scaleFactor = (float)7 / Cards.Count;
+            float scaleFactor = (float)10 / Cards.Count;
             CardsParentTransform.transform.localScale = new Vector3(scaleFactor, scaleFactor, CardsParentTransform.transform.localScale.z);
         }
 

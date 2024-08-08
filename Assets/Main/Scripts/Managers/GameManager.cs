@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
 
     public CardManager CardManager { get; private set; }
     public DeckManager DeckManager { get; private set; }
-    public TurnManager TurnManager { get; private set; }
     public DiscardPile DiscardPile { get; private set; }
 
     private void Awake()
@@ -24,7 +23,6 @@ public class GameManager : MonoBehaviour
     {
         CardManager = CardManager.Instance;
         DeckManager = DeckManager.Instance;
-        TurnManager = TurnManager.Instance;
         DiscardPile = DiscardPile.Instance;
 
         CardManager.SetupUnoClassic();
@@ -37,8 +35,7 @@ public class GameManager : MonoBehaviour
     private void StartGame()
     {
         SetPlayers();
-        DealCards();
-        StartTurn();
+        StartCoroutine(DealCards());
     }
 
     #region Game States
@@ -49,7 +46,7 @@ public class GameManager : MonoBehaviour
             TurnManager.AddPlayer(player);
     }
 
-    private void DealCards()
+    private IEnumerator DealCards()
     {
         foreach (var player in Players)
         {
@@ -57,25 +54,32 @@ public class GameManager : MonoBehaviour
             {
                 Card card = DeckManager.GetCard();
                 player.AddCard(card);
+                yield return new WaitForSeconds(0.2f);
             }
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(player.ArrangeTheCards());
         }
+
+        yield return new WaitForSeconds(0.2f);
+        
+        StartCoroutine(StartTurn());
     }
 
-    private void StartTurn()
+    private IEnumerator StartTurn()
     {
         Card card = DeckManager.GetCard();
-        
-        if (card.CardTypeEnum == CardTypeEnum.WILD || card.CardTypeEnum == CardTypeEnum.WILD_DRAW)
+
+        while (card.CardTypeEnum == CardTypeEnum.WILD || card.CardTypeEnum == CardTypeEnum.WILD_DRAW)
         {
             DeckManager.PutCardBackOfDeck(card);
-            Debug.Log($"{card.CardTypeEnum} : {card.name}");
-            StartTurn();
+            card = DeckManager.GetCard();
         }
-        else
-        {
-            StartCoroutine(DiscardPile.DropCard(card));
-            TurnManager.StartTurn();
-        }
+
+        StartCoroutine(DiscardPile.DiscardCard(card, null));
+
+        yield return new WaitForSeconds(1f);
+
+        TurnManager.StartTurn();
     }
 
     #endregion
