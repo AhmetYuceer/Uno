@@ -4,7 +4,6 @@
     {
         player.MyTurn = false;
         Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
-        nextPlayer.IsSkip = true;
         TurnManager.NextTurn(nextPlayer);
     }
 }

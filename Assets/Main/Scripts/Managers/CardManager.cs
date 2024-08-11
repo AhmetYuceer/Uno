@@ -36,11 +36,11 @@ public class CardManager : MonoBehaviour
 
     public void SetupUnoClassic()
     {
-        CreateBlueCards();
-        CreateRedCards();
-        CreateGreenCards();
         CreateYellowCards();
-        CreateWildCards();
+        //CreateBlueCards();
+        //CreateRedCards();
+        //CreateGreenCards();
+        //CreateWildCards();
     }
 
     #region CardSetupUnoClassic
@@ -52,22 +52,26 @@ public class CardManager : MonoBehaviour
 
     private void CreateYellowCards()
     {
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.ZERO, 1);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.ONE, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.TWO, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.THREE, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.FOUR, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.FIVE, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.SIX, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.SEVEN, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.EIGHT, 2);
-        CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.NINE, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.ZERO, 1);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.ONE, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.TWO, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.THREE, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.FOUR, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.FIVE, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.SIX, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.SEVEN, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.EIGHT, 2);
+        //CreateNormalCard(CardColorEnum.YELLOW, CardFaceValueEnum.NINE, 2);
 
-        CreateSpecialCard(CardTypeEnum.DRAW, CardColorEnum.YELLOW, 2);
-        CreateSpecialCard(CardTypeEnum.REVERSE, CardColorEnum.YELLOW, 2);
-        CreateSpecialCard(CardTypeEnum.SKIP, CardColorEnum.YELLOW, 2);
+        //CreateSpecialCard(CardTypeEnum.DRAW, CardColorEnum.YELLOW, 2);
+        //CreateSpecialCard(CardTypeEnum.REVERSE, CardColorEnum.YELLOW, 2);
+        //CreateSpecialCard(CardTypeEnum.SKIP, CardColorEnum.YELLOW, 2);
+
+        //CreateSpecialCard(CardTypeEnum.SKIP, CardColorEnum.YELLOW, 100);
+        CreateSpecialCard(CardTypeEnum.REVERSE, CardColorEnum.YELLOW, 100);
+        // CreateSpecialCard(CardTypeEnum.DRAW, CardColorEnum.YELLOW, 100);
     }
-
+    
     private void CreateGreenCards()
     {
         CreateNormalCard(CardColorEnum.GREEN, CardFaceValueEnum.ZERO, 1);

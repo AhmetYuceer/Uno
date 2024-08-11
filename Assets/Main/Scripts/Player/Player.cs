@@ -5,8 +5,6 @@ using DG.Tweening;
 
 public abstract class Player : MonoBehaviour
 {
-    public bool IsDraw, IsSkip;
-
     public List<Card> Cards = new List<Card>();
     public List<Card> SelectableCards = new List<Card>();
 
@@ -20,7 +18,7 @@ public abstract class Player : MonoBehaviour
     {
         get
         {
-            return  _isMyTurn;
+            return _isMyTurn;
         }
         set
         {
@@ -40,8 +38,8 @@ public abstract class Player : MonoBehaviour
             }
         }
     }
- 
-    public virtual void DrawCard() { }
+
+    public virtual void DrawCard(int cardCount) { }
     public virtual void DiscardCard(Card card) { }
     public virtual void AddCard(Card card)
     {
@@ -53,11 +51,7 @@ public abstract class Player : MonoBehaviour
 
     public void AnimationAddCard(Card card)
     {
-        card.transform.DOLocalMove(Vector3.zero, 0.5f).OnComplete(() =>
-        {
-            if (GetType() == typeof(RealPlayer))
-                card.TurnFront();
-        });
+        card.transform.DOLocalMove(Vector3.zero, 0.5f);
     }
 
     public void SetSelectableCards()
@@ -133,7 +127,7 @@ public abstract class Player : MonoBehaviour
             card.GetComponent<Transform>().localRotation = Quaternion.identity;
             card.GetComponent<Transform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
-      
+
         if (Cards.Count >= 10)
         {
             float scaleFactor = (float)10 / Cards.Count;
@@ -155,12 +149,22 @@ public abstract class Player : MonoBehaviour
             Cards[i].transform.localPosition = new Vector3(((currentX + cardSize.x) / Offset) + (CardsParentTransform.transform.localPosition.x * -1), 0, 0);
             currentX += cardSize.x;
 
-            if (i!= 0)
-                Cards[i].GetCardSpriteRenderer().sortingOrder = Cards[i-1].GetCardSpriteRenderer().sortingOrder + 2;
+            if (i != 0)
+                Cards[i].GetCardSpriteRenderer().sortingOrder = Cards[i - 1].GetCardSpriteRenderer().sortingOrder + 2;
             else
                 Cards[i].GetCardSpriteRenderer().sortingOrder = 2;
-            
+
             Cards[i].GetCardBorderSpriteRenderer().sortingOrder = Cards[i].GetCardSpriteRenderer().sortingOrder - 1;
         }
+
+        if (GetType() == typeof(RealPlayer))
+        {
+            foreach (var card in Cards)
+            {
+                card.TurnFront();
+            }
+        }
+
+        yield return null;
     }
-} 
+}

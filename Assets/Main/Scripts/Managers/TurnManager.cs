@@ -3,12 +3,26 @@ using System.Collections.Generic;
 public static class TurnManager
 {
     private static List<Player> _players = new List<Player>();
-    public static TurnDirectionEnum TurnDirection { get; private set; }
+    public static TurnDirectionEnum TurnDirection { get; private set; } = TurnDirectionEnum.RIGHT;
 
-    public static void StartTurn()
+    public static void StartTurn(Card firstCard)
     {
-        TurnDirection = TurnDirectionEnum.RIGHT;
-        _players[0].MyTurn = true;
+        switch (firstCard.CardTypeEnum)
+        {
+            case CardTypeEnum.NORMAL:
+                _players[0].MyTurn = true;
+                break;
+            case CardTypeEnum.DRAW:
+                firstCard.ApplyAction(_players[0]);
+                break;
+            case CardTypeEnum.REVERSE:
+                firstCard.ApplyAction(_players[0]);
+                break;
+            case CardTypeEnum.SKIP:
+                firstCard.ApplyAction(_players[_players.Count - 1]);
+                break;
+        }
+
     }
 
     public static void AddPlayer(Player player)
@@ -31,6 +45,12 @@ public static class TurnManager
 
     public static void NextTurn(Player currentPlayer)
     {
+        if (currentPlayer.Cards.Count == 0)
+        {
+            GameManager.Instance.EndGame(currentPlayer);
+            return;
+        }
+
         Player nextPlayer = GetNextPlayerIndex(currentPlayer);
         currentPlayer.MyTurn = false;
         nextPlayer.MyTurn = true;
@@ -57,5 +77,4 @@ public static class TurnManager
         
         return _players[playerIndex];
     }
-
 }

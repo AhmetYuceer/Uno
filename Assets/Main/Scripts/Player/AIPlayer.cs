@@ -3,31 +3,20 @@ using System.Collections;
 
 public class AIPlayer : Player
 {
-    private bool _isDrawn;
+    private bool _isDrawn = false;
     private const float OFFSET = 1f;
-    private float _moveDelay = 2f;
+    private float _moveDelay = 1f;
 
-    public override bool MyTurn 
-    { 
+    public override bool MyTurn
+    {
         set
         {
             base.MyTurn = value;
-            
+
             if (MyTurn)
             {
-                if (IsDraw)
-                {
-                    IsDraw = false;
-                }
-                else if (IsSkip)
-                {
-                    IsSkip = false;
-                }
-                else
-                {
-                    StartCoroutine(PlayTurn());
-                }
-            } 
+                StartCoroutine(PlayTurn());
+            }
         }
     }
 
@@ -37,7 +26,7 @@ public class AIPlayer : Player
         yield return new WaitForSeconds(_moveDelay);
         PlayerAction();
     }
-    
+
     public void PlayerAction()
     {
         SetSelectableCards();
@@ -45,16 +34,15 @@ public class AIPlayer : Player
         if (SelectableCards.Count > 0)
         {
             int rndIndex = Random.Range(0, SelectableCards.Count);
-            
+
             Card card = SelectableCards[rndIndex];
             Cards.Remove(card);
-
             DiscardCard(card);
         }
         else if (!_isDrawn)
         {
             _isDrawn = true;
-            DrawCard();
+            DrawCard(1);
         }
         else
         {
@@ -74,10 +62,25 @@ public class AIPlayer : Player
         StartCoroutine(GameManager.Instance.DiscardPile.DiscardCard(card, this));
     }
 
-    public override void DrawCard()
+    public override void DrawCard(int cardCount)
     {
-        Card card = GameManager.Instance.DeckManager.GetCard();
-        AddCard(card);
+        StartCoroutine(AnimationDrawCard(cardCount));
+    }
+
+    private IEnumerator AnimationDrawCard(int cardCount)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < cardCount; i++)
+        {
+            Card card = GameManager.Instance.DeckManager.GetCard();
+            card.LookAtCard();
+            AddCard(card);
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(ArrangeTheCards());
+        }
+
+        yield return new WaitForSeconds(0.2f);
         PlayerAction();
     }
 }

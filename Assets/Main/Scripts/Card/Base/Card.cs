@@ -5,6 +5,7 @@ public abstract class Card : MonoBehaviour
 {
     public bool IsSelectable;
     public bool IsShowable;
+    private bool _isDiscarded;
 
     public CardColorEnum CardColor;
     public CardTypeEnum CardTypeEnum;
@@ -20,42 +21,20 @@ public abstract class Card : MonoBehaviour
     private int _defaultChildOrderValue;
     private int _maxOrderValue = 10000;
     private Vector3 _defaultScale = Vector3.one;
-    private Vector3 _lookedScaleSize = new Vector3(1.5f, 1.5f, 1.5f);
-
-    [Header("Drag And Drop")]
-    private Vector3 _previosPosition;
+    private Vector3 _lookedScaleSize = new Vector3(1.3f, 1.3f, 1.3f);
 
     public virtual void ApplyAction(Player player) { }
 
-    private void OnMouseDown()
-    {
-        _previosPosition = transform.position;
-    }
-
-    private void OnMouseDrag()
-    {
-        if (_isRayHitting && IsSelectable && IsShowable)
-        {
-            var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.position = new Vector2(pos.x, pos.y);
-        }
-    }
-
-    private void OnMouseUp()
-    {
-        transform.position = _previosPosition;
-        StopLookingCard();
-    }
-  
     public void LookAtCard()
     {
-        if (!_isRayHitting && IsShowable)
+        if (!_isRayHitting && IsShowable && !_isDiscarded)
         {
             _isRayHitting = true;
             _defaultScale = transform.GetChild(0).localScale;
-            
+
             _defaultOrderValue = _cardSpriteRenderer.sortingOrder;
             _defaultChildOrderValue = _cardBorderSpriteRenderer.sortingOrder;
+
             _cardSpriteRenderer.sortingOrder = _maxOrderValue;
             _cardBorderSpriteRenderer.sortingOrder = _maxOrderValue - 1;
 
@@ -79,6 +58,15 @@ public abstract class Card : MonoBehaviour
     private void LookAnimation(Transform childTransform, Vector3 size)
     {
         childTransform.DOScale(size, 0.5f);
+    }
+
+    public void DiscardedCard()
+    {
+        IsShowable = true;
+        IsSelectable = false;
+        TurnFront();
+        LookAtCard();
+        _isDiscarded = true;
     }
 
     public void SetSprite(Sprite frontSprite, Sprite backSprite)

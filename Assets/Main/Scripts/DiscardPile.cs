@@ -17,8 +17,8 @@ public class DiscardPile : MonoBehaviour
         else
             Destroy(gameObject);
     }
- 
-    public void SetManager(Transform droppedCardsTranform , int droppedCardCapacity)
+
+    public void SetManager(Transform droppedCardsTranform, int droppedCardCapacity)
     {
         _discardedCardsTranform = droppedCardsTranform;
         _discardedCards = new Stack<Card>(droppedCardCapacity);
@@ -26,32 +26,34 @@ public class DiscardPile : MonoBehaviour
 
     public IEnumerator DiscardCard(Card card, Player player)
     {
-        yield return new WaitForSeconds(1f);
-
         _discardedCards.Push(card);
         SortDiscardedCardList();
+        card.DiscardedCard();
+
+        yield return new WaitForSeconds(0.2f);
+
+        DiscardAnimation(card, player);
+
+        yield return new WaitForSeconds(0.5f);
         
-        card.IsShowable = true;
-        card.TurnFront();
-        card.LookAtCard();
-
-        yield return new WaitForSeconds(1f);
-        DiscardAnimation(card);
-
         if (player != null)
-        {
-            card.ApplyAction(player);
             StartCoroutine(player.ArrangeTheCards());
-        }
     }
 
-    private void DiscardAnimation(Card card)
+    private void DiscardAnimation(Card card, Player player)
     {
-        card.StopLookingCard();
         card.transform.SetParent(_discardedCardsTranform);
         card.transform.localRotation = Quaternion.identity;
         card.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-        card.transform.DOLocalMove(Vector3.zero, 0.5f);
+
+        card.transform.DOLocalMove(Vector3.zero, 0.5f)
+        .OnComplete(() =>
+        {
+            card.StopLookingCard();
+
+            if (player != null)
+                card.ApplyAction(player);
+        });
     }
 
     private void SortDiscardedCardList()

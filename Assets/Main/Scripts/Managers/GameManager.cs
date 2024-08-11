@@ -37,9 +37,13 @@ public class GameManager : MonoBehaviour
         SetPlayers();
         StartCoroutine(DealCards());
     }
+    
+    public void EndGame(Player wonPlayer)
+    {
+        Debug.Log("Won : " + wonPlayer.name);
+    }
 
     #region Game States
-
     private void SetPlayers()
     {
         foreach (var player in Players)
@@ -78,9 +82,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DiscardPile.DiscardCard(card, null));
 
         yield return new WaitForSeconds(1f);
-
-        TurnManager.StartTurn();
+        TurnManager.StartTurn(card);
     }
-
     #endregion
+   
 }

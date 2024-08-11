@@ -5,7 +5,6 @@
     public override void ApplyAction(Player player)
     {
         Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
-        nextPlayer.IsDraw = true;
         player.MyTurn = false;
 
         if (nextPlayer.GetType() == typeof(AIPlayer))
