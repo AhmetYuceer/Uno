@@ -16,7 +16,7 @@ public class DrawCard : Card
         }
         else
         {
-            // UI arayüzünü aç
+            nextPlayer.DrawCard(DRAW_VALUE);
             TurnManager.NextTurn(player);
         }
     }

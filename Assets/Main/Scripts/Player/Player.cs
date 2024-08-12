@@ -9,7 +9,7 @@ public abstract class Player : MonoBehaviour
     public List<Card> SelectableCards = new List<Card>();
 
     public Transform CardsParentTransform;
-    public float Offset;
+    [HideInInspector] public float Offset;
 
     private SpriteRenderer _spriteRenderer;
     private bool _isMyTurn = false;

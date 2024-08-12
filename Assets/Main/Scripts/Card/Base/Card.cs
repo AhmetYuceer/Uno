@@ -5,7 +5,21 @@ public abstract class Card : MonoBehaviour
 {
     public bool IsSelectable;
     public bool IsShowable;
-    public bool IsDiscarded;
+    public bool _isDiscarded;
+
+    public bool IsDiscarded
+    {
+        get { return _isDiscarded; }
+        set 
+        { 
+            _isDiscarded = value;
+
+            if (_isDiscarded)
+                this.tag = "DiscardArea";
+            else
+                this.tag = "Card";
+        }
+    }
 
     public CardColorEnum CardColor;
     public CardTypeEnum CardTypeEnum;

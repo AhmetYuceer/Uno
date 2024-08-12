@@ -24,21 +24,13 @@ public class WildDrawCard : Card
     {
         this.CardColor = _cardColors[colorIndex];
 
-        if (player == null)
-        {
-            Debug.Log("Null");
-        }
+        Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
+        player.MyTurn = false;
 
-        if (player.GetType() == typeof(AIPlayer))
-        {
-            Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
-            player.MyTurn = false;
+        if (nextPlayer.GetType() == typeof(AIPlayer))
             StartCoroutine(AnimationDrawCard(nextPlayer, DRAW_VALUE));
-        }
         else
-        {
-            //Draw menüsünü aç
-        }
+            nextPlayer.DrawCard(DRAW_VALUE);
     }
 
     private IEnumerator AnimationDrawCard(Player player, int cardCount)

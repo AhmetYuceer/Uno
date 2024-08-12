@@ -135,6 +135,11 @@ MonoBehaviour:
   SelectableCards: []
   CardsParentTransform: {fileID: 7438700560854840827}
   Offset: 0
+  _cardLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  LastHitCard: {fileID: 0}
+  IsDraw: 0
 --- !u!114 &1671619239350150398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,9 +152,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcfa104455f787b4dab462f8b76bd4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cardLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _cardDropAreaLayer:
-    serializedVersion: 2
-    m_Bits: 128

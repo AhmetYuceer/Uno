@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1604217030749127288}
   - component: {fileID: 1055233799029275630}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: DiscardedCardTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 506063678652415854}
   - component: {fileID: 3134765881940859596}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Deck (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1630424318261087050}
   - component: {fileID: 1385528626658736447}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,9 +265,9 @@ GameObject:
   - component: {fileID: 4546968217022091773}
   - component: {fileID: 2195488665261672639}
   - component: {fileID: 5312971099600484185}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Deck
-  m_TagString: Untagged
+  m_TagString: Deck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -369,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1497256311062502129}
   - component: {fileID: 941935659857108490}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -453,7 +453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3330772907894290756}
   - component: {fileID: 1228680131281205319}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Deck (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +538,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373703775124625370}
   - component: {fileID: 6533581550342202872}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -621,7 +621,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6626067207735163548}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: SpawnedCardsParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -652,7 +652,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6353889434532898772}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Childs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,7 +688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5057434998163744596}
   - component: {fileID: 4233540807479051815}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Deck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
