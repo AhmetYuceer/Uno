@@ -2,18 +2,25 @@
 
 public class WildCard : Card
 {
+    private CardColorEnum[] _cardColors = { CardColorEnum.RED, CardColorEnum.BLUE, CardColorEnum.YELLOW, CardColorEnum.GREEN };
+
     public override void ApplyAction(Player player)
     {
         if (player.GetType() == typeof(AIPlayer))
         {
-            CardColorEnum[] cardColors = { CardColorEnum.YELLOW , CardColorEnum.BLUE, CardColorEnum.RED, CardColorEnum.GREEN};
-            int colorIndex = Random.Range(0, cardColors.Length);
-            this.CardColor = cardColors[colorIndex];
-            TurnManager.NextTurn(player);
+            int colorIndex = Random.Range(0, _cardColors.Length);
+            ChangeColor(player, colorIndex);
         }
         else
         {
-            //Kart rengi seçme menüsünü aç       
+            RealPlayer realPlayer = (RealPlayer)player;
+            UIManager.Instance.OpenChooseColorPanel(realPlayer, this);
         }
+    }
+
+    public void ChangeColor(Player player , int colorIndex)
+    {
+        this.CardColor = _cardColors[colorIndex];
+        TurnManager.NextTurn(player);
     }
 }

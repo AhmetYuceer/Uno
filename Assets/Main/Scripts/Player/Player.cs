@@ -40,7 +40,13 @@ public abstract class Player : MonoBehaviour
     }
 
     public virtual void DrawCard(int cardCount) { }
-    public virtual void DiscardCard(Card card) { }
+
+    public void DiscardCard(Card card) 
+    {
+        StartCoroutine(GameManager.Instance.DiscardPile.DiscardCard(card, this));
+        Cards.Remove(card);
+    }
+    
     public virtual void AddCard(Card card)
     {
         Cards.Add(card);
@@ -56,6 +62,11 @@ public abstract class Player : MonoBehaviour
 
     public void SetSelectableCards()
     {
+        foreach (var item in SelectableCards)
+        {
+            item.IsSelectable = false;
+        }
+
         SelectableCards.Clear();
 
         Card lastDiscardedCard = GameManager.Instance.DiscardPile.GetLastDiscardedCard();
@@ -131,6 +142,8 @@ public abstract class Player : MonoBehaviour
         if (Cards.Count >= 10)
         {
             float scaleFactor = (float)10 / Cards.Count;
+
+            scaleFactor = Mathf.Clamp(scaleFactor, 0.5f, 0.7f);
             CardsParentTransform.transform.localScale = new Vector3(scaleFactor, scaleFactor, CardsParentTransform.transform.localScale.z);
         }
 

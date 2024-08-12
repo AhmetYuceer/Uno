@@ -8,10 +8,11 @@ public class DrawCard : Card
     public override void ApplyAction(Player player)
     {
         Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
+        player.MyTurn = false;
 
         if (nextPlayer.GetType() == typeof(AIPlayer))
         {
-            StartCoroutine(AnimationDrawCard(player, DRAW_VALUE));
+            StartCoroutine(AnimationDrawCard(nextPlayer, DRAW_VALUE));
         }
         else
         {

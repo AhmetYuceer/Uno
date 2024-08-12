@@ -7,12 +7,12 @@ public class InputManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _mouseLeftClickAction += CardViewer.ViewCard;
+        _mouseLeftClickAction += PlayerController.Instance.CastRay;
     }
 
     private void OnDisable()
     {
-        _mouseLeftClickAction -= CardViewer.ViewCard;
+        _mouseLeftClickAction -= PlayerController.Instance.CastRay;
     }
 
     private void Update()

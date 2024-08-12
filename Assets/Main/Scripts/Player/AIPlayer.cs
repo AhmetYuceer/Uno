@@ -5,7 +5,7 @@ public class AIPlayer : Player
 {
     private bool _isDrawn = false;
     private const float OFFSET = 1f;
-    private float _moveDelay = 1f;
+    private float _moveDelay = 1.5f;
 
     public override bool MyTurn
     {
@@ -22,7 +22,6 @@ public class AIPlayer : Player
 
     public IEnumerator PlayTurn()
     {
-        CardViewer.StopShowingCard();
         yield return new WaitForSeconds(_moveDelay);
         PlayerAction();
     }
@@ -34,9 +33,7 @@ public class AIPlayer : Player
         if (SelectableCards.Count > 0)
         {
             int rndIndex = Random.Range(0, SelectableCards.Count);
-
             Card card = SelectableCards[rndIndex];
-            Cards.Remove(card);
             DiscardCard(card);
         }
         else if (!_isDrawn)
@@ -55,11 +52,6 @@ public class AIPlayer : Player
     {
         Offset = OFFSET;
         base.AddCard(card);
-    }
-
-    public override void DiscardCard(Card card)
-    {
-        StartCoroutine(GameManager.Instance.DiscardPile.DiscardCard(card, this));
     }
 
     public override void DrawCard(int cardCount)

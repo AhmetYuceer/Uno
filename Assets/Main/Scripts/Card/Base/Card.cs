@@ -5,7 +5,7 @@ public abstract class Card : MonoBehaviour
 {
     public bool IsSelectable;
     public bool IsShowable;
-    private bool _isDiscarded;
+    public bool IsDiscarded;
 
     public CardColorEnum CardColor;
     public CardTypeEnum CardTypeEnum;
@@ -25,9 +25,17 @@ public abstract class Card : MonoBehaviour
 
     public virtual void ApplyAction(Player player) { }
 
+    public void SetOrder(int cardOrder)
+    {
+        _defaultOrderValue = cardOrder;
+        _defaultChildOrderValue = cardOrder - 1;
+        _cardSpriteRenderer.sortingOrder = _defaultOrderValue;
+        _cardBorderSpriteRenderer.sortingOrder = _defaultChildOrderValue;
+    }
+
     public void LookAtCard()
     {
-        if (!_isRayHitting && IsShowable && !_isDiscarded)
+        if (!_isRayHitting && IsShowable && !IsDiscarded)
         {
             _isRayHitting = true;
             _defaultScale = transform.GetChild(0).localScale;
@@ -58,15 +66,6 @@ public abstract class Card : MonoBehaviour
     private void LookAnimation(Transform childTransform, Vector3 size)
     {
         childTransform.DOScale(size, 0.5f);
-    }
-
-    public void DiscardedCard()
-    {
-        IsShowable = true;
-        IsSelectable = false;
-        TurnFront();
-        LookAtCard();
-        _isDiscarded = true;
     }
 
     public void SetSprite(Sprite frontSprite, Sprite backSprite)

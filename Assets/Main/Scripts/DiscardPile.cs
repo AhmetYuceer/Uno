@@ -27,20 +27,19 @@ public class DiscardPile : MonoBehaviour
     public IEnumerator DiscardCard(Card card, Player player)
     {
         _discardedCards.Push(card);
-        SortDiscardedCardList();
-        card.DiscardedCard();
 
-        yield return new WaitForSeconds(0.2f);
-
-        DiscardAnimation(card, player);
-
-        yield return new WaitForSeconds(0.5f);
+        card.IsDiscarded = true;
+        card.IsShowable = false;
+        card.IsSelectable = false;
+        card.TurnFront();
+        card.LookAtCard();
+     
+        yield return new WaitForSeconds(0.6f);
         
-        if (player != null)
-            StartCoroutine(player.ArrangeTheCards());
+        StartCoroutine(DiscardAnimation(card, player));
     }
 
-    private void DiscardAnimation(Card card, Player player)
+    private IEnumerator DiscardAnimation(Card card, Player player)
     {
         card.transform.SetParent(_discardedCardsTranform);
         card.transform.localRotation = Quaternion.identity;
@@ -49,27 +48,18 @@ public class DiscardPile : MonoBehaviour
         card.transform.DOLocalMove(Vector3.zero, 0.5f)
         .OnComplete(() =>
         {
-            card.StopLookingCard();
-
             if (player != null)
+            {
                 card.ApplyAction(player);
+                StartCoroutine(player.ArrangeTheCards());
+            }
         });
-    }
+        
+        yield return new WaitForSeconds(0.2f);
 
-    private void SortDiscardedCardList()
-    {
-        List<Card> temp = new List<Card>(_discardedCards);
-        temp.Reverse();
-
-        for (int i = 0; i < temp.Count; i++)
-        {
-            if (i != 0)
-                temp[i].GetCardSpriteRenderer().sortingOrder = temp[i - 1].GetCardSpriteRenderer().sortingOrder + 2;
-            else
-                temp[i].GetCardSpriteRenderer().sortingOrder = 2;
-
-            temp[i].GetCardBorderSpriteRenderer().sortingOrder = temp[i].GetCardSpriteRenderer().sortingOrder - 1;
-        }
+        int sortingOrder = _discardedCards.Count * 2;
+        card.SetOrder(sortingOrder);
+        card.StopLookingCard();
     }
 
     public Card GetLastDiscardedCard()
