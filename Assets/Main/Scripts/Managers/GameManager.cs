@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+    public bool IsPlay {  get; private set; }
     public static GameManager Instance;
     public List<Player> Players = new List<Player>();
 
@@ -36,10 +37,12 @@ public class GameManager : MonoBehaviour
     {
         SetPlayers();
         StartCoroutine(DealCards());
+        IsPlay = true;
     }
     
     public void EndGame(Player wonPlayer)
     {
+        IsPlay = false;
         Debug.Log("Won : " + wonPlayer.name);
     }
 

@@ -91,7 +91,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5518849420054228114, guid: 47a4af30d9614c24f8c7306cb1bfb281, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6024152151536831194, guid: 47a4af30d9614c24f8c7306cb1bfb281, type: 3}
@@ -125,4 +126,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cards: []
+  SelectableCards: []
   CardsParentTransform: {fileID: 4785506280128005495}
+  Offset: 0

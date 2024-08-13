@@ -28,9 +28,16 @@ public class WildDrawCard : Card
         player.MyTurn = false;
 
         if (nextPlayer.GetType() == typeof(AIPlayer))
+        {
             StartCoroutine(AnimationDrawCard(nextPlayer, DRAW_VALUE));
+        }
         else
-            nextPlayer.DrawCard(DRAW_VALUE);
+        {
+            RealPlayer realPlayer = (RealPlayer)nextPlayer;
+            realPlayer.IsWildDraw = true;
+            realPlayer.DrawCard(DRAW_VALUE);
+            TurnManager.NextTurn(player);
+        }
     }
 
     private IEnumerator AnimationDrawCard(Player player, int cardCount)

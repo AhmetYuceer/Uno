@@ -22,7 +22,6 @@ public static class TurnManager
                 firstCard.ApplyAction(_players[_players.Count - 1]);
                 break;
         }
-
     }
 
     public static void AddPlayer(Player player)
@@ -45,15 +44,12 @@ public static class TurnManager
 
     public static void NextTurn(Player currentPlayer)
     {
-        if (currentPlayer.Cards.Count == 0)
+        if (GameManager.Instance.IsPlay)
         {
-            GameManager.Instance.EndGame(currentPlayer);
-            return;
+            Player nextPlayer = GetNextPlayerIndex(currentPlayer);
+            currentPlayer.MyTurn = false;
+            nextPlayer.MyTurn = true;
         }
-
-        Player nextPlayer = GetNextPlayerIndex(currentPlayer);
-        currentPlayer.MyTurn = false;
-        nextPlayer.MyTurn = true;
     }
 
     public static Player GetNextPlayerIndex(Player currentPlayer)

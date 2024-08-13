@@ -16,7 +16,9 @@ public class DrawCard : Card
         }
         else
         {
-            nextPlayer.DrawCard(DRAW_VALUE);
+            RealPlayer realPlayer = (RealPlayer)nextPlayer;
+            realPlayer.IsDrawCard = true;
+            realPlayer.DrawCard(DRAW_VALUE);
             TurnManager.NextTurn(player);
         }
     }

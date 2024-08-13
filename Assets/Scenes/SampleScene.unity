@@ -815,7 +815,7 @@ MonoBehaviour:
   Players:
   - {fileID: 683567185}
   - {fileID: 841442075}
-  - {fileID: 1503353774}
+  - {fileID: 1503353777}
   - {fileID: 5790780}
 --- !u!1 &619394800
 GameObject:
@@ -1074,9 +1074,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2538697112104236358, guid: a9202880c2f097d4c94ee0b2f2233095, type: 3}
   m_PrefabInstance: {fileID: 3951961590961298981}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1503353774 stripped
+--- !u!114 &1503353777 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8884678681653317452, guid: a9202880c2f097d4c94ee0b2f2233095, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4339132113945727758, guid: a9202880c2f097d4c94ee0b2f2233095, type: 3}
   m_PrefabInstance: {fileID: 3951961590961298981}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -1766,7 +1766,12 @@ PrefabInstance:
       propertyPath: Offset
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8884678681653317452, guid: a9202880c2f097d4c94ee0b2f2233095, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1671619239350150398, guid: a9202880c2f097d4c94ee0b2f2233095, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -5,6 +5,10 @@ using DG.Tweening;
 
 public abstract class Player : MonoBehaviour
 {
+    public bool IsDraw;
+    public bool IsDrawCard;
+    public bool IsWildDraw;
+
     public List<Card> Cards = new List<Card>();
     public List<Card> SelectableCards = new List<Card>();
 
@@ -44,7 +48,6 @@ public abstract class Player : MonoBehaviour
     public void DiscardCard(Card card) 
     {
         StartCoroutine(GameManager.Instance.DiscardPile.DiscardCard(card, this));
-        Cards.Remove(card);
     }
     
     public virtual void AddCard(Card card)
@@ -132,6 +135,9 @@ public abstract class Player : MonoBehaviour
     public IEnumerator ArrangeTheCards()
     {
         yield return null;
+
+        if (Cards.Count < 1)
+            GameManager.Instance.EndGame(this);
 
         foreach (var card in Cards)
         {

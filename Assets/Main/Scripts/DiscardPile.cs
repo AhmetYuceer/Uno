@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class DiscardPile : MonoBehaviour
 {
@@ -48,9 +49,10 @@ public class DiscardPile : MonoBehaviour
         card.transform.DOLocalMove(Vector3.zero, 0.5f)
         .OnComplete(() =>
         {
-            if (player != null)
+            if (player != null && GameManager.Instance.IsPlay)
             {
                 card.ApplyAction(player);
+                player.Cards.Remove(card);
                 StartCoroutine(player.ArrangeTheCards());
             }
         });
