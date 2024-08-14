@@ -3,7 +3,6 @@ using System.Collections;
 
 public class AIPlayer : Player
 {
-    private bool _isDrawn = false;
     private const float OFFSET = 1f;
     private float _moveDelay = 1.5f;
 
@@ -35,15 +34,16 @@ public class AIPlayer : Player
             int rndIndex = Random.Range(0, SelectableCards.Count);
             Card card = SelectableCards[rndIndex];
             DiscardCard(card);
+            IsDraw = false;
         }
-        else if (!_isDrawn)
+        else if (!IsDraw)
         {
-            _isDrawn = true;
-            DrawCard(1);
+            IsDraw = true;
+            DrawCard(1, CardTypeEnum.DRAW);
         }
         else
         {
-            _isDrawn = false;
+            IsDraw = false;
             TurnManager.NextTurn(this);
         }
     }
@@ -54,21 +54,20 @@ public class AIPlayer : Player
         base.AddCard(card);
     }
 
-    public override void DrawCard(int cardCount)
+    public override void DrawCard(int cardCount, CardTypeEnum cardType)
     {
         StartCoroutine(AnimationDrawCard(cardCount));
     }
 
     private IEnumerator AnimationDrawCard(int cardCount)
     {
-        yield return new WaitForSeconds(0.5f);
-
         for (int i = 0; i < cardCount; i++)
         {
             Card card = GameManager.Instance.DeckManager.GetCard();
-            card.LookAtCard();
             AddCard(card);
+            card.SetMaxOrder();
             yield return new WaitForSeconds(0.5f);
+            card.SetDefauldOrder();
             StartCoroutine(ArrangeTheCards());
         }
 

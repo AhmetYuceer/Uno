@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using Unity.Collections.LowLevel.Unsafe;
 
 public class DiscardPile : MonoBehaviour
 {
@@ -29,13 +28,13 @@ public class DiscardPile : MonoBehaviour
     {
         _discardedCards.Push(card);
 
+        card.SetMaxOrder();
         card.IsDiscarded = true;
         card.IsShowable = false;
         card.IsSelectable = false;
         card.TurnFront();
-        card.LookAtCard();
      
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.2f);
         
         StartCoroutine(DiscardAnimation(card, player));
     }
@@ -51,8 +50,14 @@ public class DiscardPile : MonoBehaviour
         {
             if (player != null && GameManager.Instance.IsPlay)
             {
-                card.ApplyAction(player);
+                card.SetDefauldOrder();
+
                 player.Cards.Remove(card);
+
+                if (player.Cards.Count < 1)
+                    GameManager.Instance.EndGame(player);
+                
+                card.ApplyAction(player);
                 StartCoroutine(player.ArrangeTheCards());
             }
         });

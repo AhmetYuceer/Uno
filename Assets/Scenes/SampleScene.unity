@@ -1828,6 +1828,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AIPlayer_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8867864806546389464, guid: 57c128249bafb6849be9d23f46a4bf12, type: 3}
+      propertyPath: IsDrawCard
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -28,13 +28,9 @@ public abstract class Player : MonoBehaviour
         {
             _isMyTurn = value;
 
-            if (_spriteRenderer == null)
-                _spriteRenderer = GetComponent<SpriteRenderer>();
-
             if (_isMyTurn)
             {
                 _spriteRenderer.color = Color.green;
-                SetSelectableCards();
             }
             else
             {
@@ -43,11 +39,18 @@ public abstract class Player : MonoBehaviour
         }
     }
 
-    public virtual void DrawCard(int cardCount) { }
+    private void Start()
+    {
+        if (_spriteRenderer == null)
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public virtual void DrawCard(int cardCount, CardTypeEnum cardType) { }
 
     public void DiscardCard(Card card) 
     {
         StartCoroutine(GameManager.Instance.DiscardPile.DiscardCard(card, this));
+        ClearSelectableCards();
     }
     
     public virtual void AddCard(Card card)
@@ -63,14 +66,17 @@ public abstract class Player : MonoBehaviour
         card.transform.DOLocalMove(Vector3.zero, 0.5f);
     }
 
-    public void SetSelectableCards()
+    private void ClearSelectableCards()
     {
         foreach (var item in SelectableCards)
-        {
             item.IsSelectable = false;
-        }
 
         SelectableCards.Clear();
+    }
+
+    public void SetSelectableCards()
+    {
+        ClearSelectableCards();
 
         Card lastDiscardedCard = GameManager.Instance.DiscardPile.GetLastDiscardedCard();
         List<WildDrawCard> wildDrawCards = new List<WildDrawCard>();
@@ -135,9 +141,6 @@ public abstract class Player : MonoBehaviour
     public IEnumerator ArrangeTheCards()
     {
         yield return null;
-
-        if (Cards.Count < 1)
-            GameManager.Instance.EndGame(this);
 
         foreach (var card in Cards)
         {

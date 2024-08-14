@@ -17,8 +17,7 @@ public class DrawCard : Card
         else
         {
             RealPlayer realPlayer = (RealPlayer)nextPlayer;
-            realPlayer.IsDrawCard = true;
-            realPlayer.DrawCard(DRAW_VALUE);
+            realPlayer.DrawCard(DRAW_VALUE, this.CardTypeEnum);
             TurnManager.NextTurn(player);
         }
     }
@@ -30,9 +29,10 @@ public class DrawCard : Card
         for (int i = 0; i < cardCount; i++)
         {
             Card card = GameManager.Instance.DeckManager.GetCard();
-            card.LookAtCard();
             player.AddCard(card);
+            card.SetMaxOrder();
             yield return new WaitForSeconds(0.5f);
+            card.SetDefauldOrder();
             StartCoroutine(player.ArrangeTheCards());
         }
         yield return null;
