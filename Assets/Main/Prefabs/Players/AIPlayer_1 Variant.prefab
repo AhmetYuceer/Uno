@@ -125,6 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a92c858375fd94c825b48fe6217b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsDraw: 0
+  IsDrawCard: 0
+  IsWildDraw: 0
   Cards: []
   SelectableCards: []
   CardsParentTransform: {fileID: 4785506280128005495}

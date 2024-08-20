@@ -63,7 +63,12 @@ public abstract class Player : MonoBehaviour
 
     public void AnimationAddCard(Card card)
     {
-        card.transform.DOLocalMove(Vector3.zero, 0.5f);
+        card.SetMaxOrder();
+        card.transform.DOLocalMove(Vector3.zero, 0.5f)
+        .OnComplete(() =>
+        {
+            card.SetDefauldOrder();
+        });
     }
 
     private void ClearSelectableCards()

@@ -32,13 +32,13 @@ public class RealPlayer : Player
             }
         }
     }
-
+        
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
             CastRay();
     }
-
+    
     private void CastRay()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -52,7 +52,8 @@ public class RealPlayer : Player
                 StartCoroutine(AnimationDrawCard(_drawCardCount));
                 return;
             }
-            else if(hit.collider.CompareTag("DiscardArea") && MyTurn && _lastHitCard != null)
+            
+            if(hit.collider.CompareTag("DiscardArea") && MyTurn && _lastHitCard != null)
             {
                 if (_lastHitCard.IsSelectable)
                     DiscardCard(_lastHitCard);
@@ -78,9 +79,7 @@ public class RealPlayer : Player
         {
             Card card = GameManager.Instance.DeckManager.GetCard();
             AddCard(card);
-            card.SetMaxOrder();
             yield return new WaitForSeconds(0.5f);
-            card.SetDefauldOrder();
             StartCoroutine(ArrangeTheCards());
         }
         yield return new WaitForSeconds(0.2f);

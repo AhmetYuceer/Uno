@@ -27,22 +27,29 @@ public class DiscardPile : MonoBehaviour
     public IEnumerator DiscardCard(Card card, Player player)
     {
         _discardedCards.Push(card);
-
-        card.SetMaxOrder();
+      
         card.IsDiscarded = true;
         card.IsShowable = false;
         card.IsSelectable = false;
-        card.TurnFront();
      
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         
         StartCoroutine(DiscardAnimation(card, player));
     }
 
     private IEnumerator DiscardAnimation(Card card, Player player)
     {
+        card.SetMaxOrder();
+        card.TurnFront();
+
         card.transform.SetParent(_discardedCardsTranform);
         card.transform.localRotation = Quaternion.identity;
+
+        if (_discardedCards.Count % 2 == 0)
+            card.transform.localRotation = Quaternion.Euler(0, 0, 15);
+        else
+            card.transform.localRotation = Quaternion.Euler(0, 0, -15);
+
         card.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
 
         card.transform.DOLocalMove(Vector3.zero, 0.5f)

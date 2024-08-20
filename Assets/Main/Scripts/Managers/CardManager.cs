@@ -37,9 +37,9 @@ public class CardManager : MonoBehaviour
     public void SetupUnoClassic()
     {
         CreateYellowCards();
-        CreateBlueCards();
-        CreateRedCards();
-        CreateGreenCards();
+        //CreateBlueCards();
+        //CreateRedCards();
+        //CreateGreenCards();
         CreateWildCards();
     }
 
@@ -47,7 +47,7 @@ public class CardManager : MonoBehaviour
     private void CreateWildCards()
     {
         CreateSpecialCard(CardTypeEnum.WILD_DRAW, CardColorEnum.WILD, 4);
-        CreateSpecialCard(CardTypeEnum.WILD, CardColorEnum.WILD, 4);
+        CreateSpecialCard(CardTypeEnum.WILD, CardColorEnum.WILD, 50);
     }
 
     private void CreateYellowCards()

@@ -65,9 +65,7 @@ public class AIPlayer : Player
         {
             Card card = GameManager.Instance.DeckManager.GetCard();
             AddCard(card);
-            card.SetMaxOrder();
             yield return new WaitForSeconds(0.5f);
-            card.SetDefauldOrder();
             StartCoroutine(ArrangeTheCards());
         }
 
