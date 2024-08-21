@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        _chooseColorPanel.SetActive(false);
         _endPanel.SetActive(false);
         buttons[0] = _redButton;
         buttons[1] = _blueButton;
