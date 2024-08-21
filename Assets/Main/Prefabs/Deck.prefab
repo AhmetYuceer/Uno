@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa2f53beb119414cb6723797a950c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DeckTransform: {fileID: 6626067207735163548}
   DroppedCardsTranform: {fileID: 1604217030749127288}
 --- !u!114 &2195488665261672639
 MonoBehaviour:

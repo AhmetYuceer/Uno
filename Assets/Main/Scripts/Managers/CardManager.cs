@@ -19,7 +19,7 @@ public class CardManager : MonoBehaviour
 
     [Header("Card Settings")]
     [SerializeField] private GameObject _cardPrebaf;
-    [SerializeField] private Transform _deckParentTransform;
+  
 
     private void Awake()
     {
@@ -37,9 +37,9 @@ public class CardManager : MonoBehaviour
     public void SetupUnoClassic()
     {
         CreateYellowCards();
-        //CreateBlueCards();
-        //CreateRedCards();
-        //CreateGreenCards();
+        CreateBlueCards();
+        CreateRedCards();
+        CreateGreenCards();
         CreateWildCards();
     }
 
@@ -47,7 +47,7 @@ public class CardManager : MonoBehaviour
     private void CreateWildCards()
     {
         CreateSpecialCard(CardTypeEnum.WILD_DRAW, CardColorEnum.WILD, 4);
-        CreateSpecialCard(CardTypeEnum.WILD, CardColorEnum.WILD, 50);
+        CreateSpecialCard(CardTypeEnum.WILD, CardColorEnum.WILD, 4);
     }
 
     private void CreateYellowCards()
@@ -179,7 +179,7 @@ public class CardManager : MonoBehaviour
 
         for (int i = 0; i < cardCount; i++)
         {
-            GameObject spawnedCard = Instantiate(_cardPrebaf, _deckParentTransform);
+            GameObject spawnedCard = Instantiate(_cardPrebaf, DeckManager.Instance.DeckTransform);
             spawnedCard.SetActive(false);
             spawnedCards[i] = spawnedCard;
         }
@@ -218,6 +218,7 @@ public class CardManager : MonoBehaviour
             normalCard.FaceValue = cardFaceValue;
             normalCard.CardColor = cardColor;
             normalCard.CardTypeEnum = CardTypeEnum.NORMAL;
+            normalCard.CardName = "Normal Card";
             normalCard.SetSprite(cardFrontSprite, _cardBackSprite);
             Cards.Add(normalCard);
         }
@@ -230,6 +231,7 @@ public class CardManager : MonoBehaviour
             drawCard.name = cardName;
             drawCard.CardColor = cardColor;
             drawCard.CardTypeEnum = CardTypeEnum.DRAW;
+            drawCard.CardName = "Draw Card";
             drawCard.SetSprite(cardFrontSprite, _cardBackSprite);
             Cards.Add(drawCard);
         }
@@ -242,6 +244,7 @@ public class CardManager : MonoBehaviour
             reverseCard.CardColor = cardColor;
             reverseCard.name = cardName;
             reverseCard.CardTypeEnum = CardTypeEnum.REVERSE;
+            reverseCard.CardName = "Reverse Card";
             reverseCard.SetSprite(cardFrontSprite, _cardBackSprite);
             Cards.Add(reverseCard);
         }
@@ -254,6 +257,7 @@ public class CardManager : MonoBehaviour
             skipCard.CardColor = cardColor;
             skipCard.name = cardName;
             skipCard.CardTypeEnum = CardTypeEnum.SKIP;
+            skipCard.CardName = "Skip Card";
             skipCard.SetSprite(cardFrontSprite, _cardBackSprite);
             Cards.Add(skipCard);
         }
@@ -266,6 +270,7 @@ public class CardManager : MonoBehaviour
             wildCard.CardColor = cardColor;
             wildCard.name = cardName;
             wildCard.CardTypeEnum = CardTypeEnum.WILD;
+            wildCard.CardName = "Wild Card";
             wildCard.SetSprite(cardFrontSprite, _cardBackSprite);
             Cards.Add(wildCard);
         }
@@ -278,6 +283,7 @@ public class CardManager : MonoBehaviour
             wildDrawCard.CardColor = cardColor;
             wildDrawCard.name = cardName;
             wildDrawCard.CardTypeEnum = CardTypeEnum.WILD_DRAW;
+            wildDrawCard.CardName = "Wild Draw Card";
             wildDrawCard.SetSprite(cardFrontSprite, _cardBackSprite);
             Cards.Add(wildDrawCard);
         }

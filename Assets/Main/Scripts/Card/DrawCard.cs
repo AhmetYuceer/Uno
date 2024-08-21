@@ -3,23 +3,33 @@ using UnityEngine;
 
 public class DrawCard : Card
 {
-    private const int DRAW_VALUE = 2;
+    public int DrawValue = 2;
 
     public override void ApplyAction(Player player)
     {
-        Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
+        base.ApplyAction(player);
+    }
+
+    public override IEnumerator Action(Player player)
+    {
+        UIManager.Instance.SetEffectText(this);
+        yield return new WaitForSeconds(0.5f);
+
+        Player nextPlayer = GameManager.Instance.TurnManager.GetNextPlayerIndex(player);
         player.MyTurn = false;
 
         if (nextPlayer.GetType() == typeof(AIPlayer))
         {
-            StartCoroutine(AnimationDrawCard(nextPlayer, DRAW_VALUE));
+            StartCoroutine(AnimationDrawCard(nextPlayer, DrawValue));
         }
         else
         {
             RealPlayer realPlayer = (RealPlayer)nextPlayer;
-            realPlayer.DrawCard(DRAW_VALUE, this.CardTypeEnum);
-            TurnManager.NextTurn(player);
+            realPlayer.DrawCard(DrawValue, this.CardTypeEnum);
+            GameManager.Instance.TurnManager.NextTurn(player);
         }
+
+        yield return null;
     }
 
     private IEnumerator AnimationDrawCard(Player player, int cardCount)
@@ -37,6 +47,6 @@ public class DrawCard : Card
         }
         yield return null;
 
-        TurnManager.NextTurn(player);
+        GameManager.Instance.TurnManager.NextTurn(player);
     }
 }

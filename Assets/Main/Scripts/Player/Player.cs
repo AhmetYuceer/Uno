@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
-
 public abstract class Player : MonoBehaviour
 {
     public bool IsDraw;
@@ -15,7 +14,7 @@ public abstract class Player : MonoBehaviour
     public Transform CardsParentTransform;
     [HideInInspector] public float Offset;
 
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer SpriteRenderer;
     private bool _isMyTurn = false;
 
     public virtual bool MyTurn
@@ -28,21 +27,23 @@ public abstract class Player : MonoBehaviour
         {
             _isMyTurn = value;
 
+            if (SpriteRenderer == null)
+                SpriteRenderer = GetComponent<SpriteRenderer>();
+
             if (_isMyTurn)
             {
-                _spriteRenderer.color = Color.green;
+                SpriteRenderer.color = Color.green;
             }
             else
             {
-                _spriteRenderer.color = Color.white;
+                SpriteRenderer.color = Color.white;
             }
         }
     }
 
     private void Start()
     {
-        if (_spriteRenderer == null)
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public virtual void DrawCard(int cardCount, CardTypeEnum cardType) { }
@@ -83,7 +84,7 @@ public abstract class Player : MonoBehaviour
     {
         ClearSelectableCards();
 
-        Card lastDiscardedCard = GameManager.Instance.DiscardPile.GetLastDiscardedCard();
+        Card lastDiscardedCard = GameManager.Instance.DiscardPile.LastDiscardedCard;
         List<WildDrawCard> wildDrawCards = new List<WildDrawCard>();
 
         foreach (var card in Cards)

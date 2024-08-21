@@ -3,46 +3,58 @@ using UnityEngine;
 
 public class WildDrawCard : Card
 {
-    private const int DRAW_VALUE = 4;
+    public int DrawValue = 4;
     private CardColorEnum[] _cardColors = { CardColorEnum.RED, CardColorEnum.BLUE, CardColorEnum.YELLOW, CardColorEnum.GREEN };
 
     public override void ApplyAction(Player player)
     {
+        base.ApplyAction(player);   
+    }
+
+    public override IEnumerator Action(Player player)
+    {
         if (player.GetType() == typeof(AIPlayer))
         {
             int colorIndex = Random.Range(0, _cardColors.Length);
-            ChangeColor(player, colorIndex);
+            StartCoroutine(ChangeColor(player, colorIndex));
         }
         else
         {
             RealPlayer realPlayer = (RealPlayer)player;
             UIManager.Instance.OpenChooseColorPanel(realPlayer, this);
         }
+
+        yield return null;
     }
 
-    public void ChangeColor(Player player, int colorIndex)
+
+    public IEnumerator ChangeColor(Player player, int colorIndex)
     {
         this.CardColor = _cardColors[colorIndex];
 
-        Player nextPlayer = TurnManager.GetNextPlayerIndex(player);
+        Player nextPlayer = GameManager.Instance.TurnManager.GetNextPlayerIndex(player);
         player.MyTurn = false;
 
         if (nextPlayer.GetType() == typeof(AIPlayer))
         {
-            StartCoroutine(AnimationDrawCard(nextPlayer, DRAW_VALUE));
+            UIManager.Instance.SetEffectText(this);
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(AnimationDrawCard(nextPlayer, DrawValue));
         }
         else
         {
             RealPlayer realPlayer = (RealPlayer)nextPlayer;
-            realPlayer.DrawCard(DRAW_VALUE,this.CardTypeEnum);
-            TurnManager.NextTurn(player);
+            realPlayer.DrawCard(DrawValue, this.CardTypeEnum);
+
+            UIManager.Instance.SetEffectText(this);
+            yield return new WaitForSeconds(0.5f);
+
+            GameManager.Instance.TurnManager.NextTurn(player);
         }
     }
 
     private IEnumerator AnimationDrawCard(Player player, int cardCount)
     {
-        yield return new WaitForSeconds(0.5f);
-
         for (int i = 0; i < cardCount; i++)
         {
             Card card = GameManager.Instance.DeckManager.GetCard();
@@ -52,8 +64,7 @@ public class WildDrawCard : Card
             card.SetDefauldOrder();
             StartCoroutine(player.ArrangeTheCards());
         }
-        yield return null;
-
-        TurnManager.NextTurn(player);
+        yield return new WaitForSeconds(0.2f);
+        GameManager.Instance.TurnManager.NextTurn(player);
     }
 }

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public bool IsPlay {  get; private set; }
+    public bool IsPlay { get; private set; }
     public static GameManager Instance;
     public List<Player> Players = new List<Player>();
 
+    public TurnManager TurnManager { get; private set; }
     public CardManager CardManager { get; private set; }
     public DeckManager DeckManager { get; private set; }
     public DiscardPile DiscardPile { get; private set; }
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
         CardManager = CardManager.Instance;
         DeckManager = DeckManager.Instance;
         DiscardPile = DiscardPile.Instance;
+        TurnManager = TurnManager.Instance;
 
         CardManager.SetupUnoClassic();
         DeckManager.SetDeck(CardManager.Cards);
@@ -35,15 +37,15 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
+        IsPlay = true;
         SetPlayers();
         StartCoroutine(DealCards());
-        IsPlay = true;
     }
     
     public void EndGame(Player wonPlayer)
     {
         IsPlay = false;
-        Debug.Log("Won : " + wonPlayer.name);
+        UIManager.Instance.EndGame(wonPlayer);
     }
 
     #region Game States
@@ -88,5 +90,4 @@ public class GameManager : MonoBehaviour
         TurnManager.StartTurn(card);
     }
     #endregion
-   
 }

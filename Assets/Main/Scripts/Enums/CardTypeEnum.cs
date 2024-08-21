@@ -1,5 +1,6 @@
 public enum CardTypeEnum  
 {
+    NONE,
     NORMAL,
     DRAW,
     REVERSE,

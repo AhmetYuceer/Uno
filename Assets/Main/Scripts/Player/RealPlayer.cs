@@ -32,7 +32,7 @@ public class RealPlayer : Player
             }
         }
     }
-        
+ 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -52,7 +52,6 @@ public class RealPlayer : Player
                 StartCoroutine(AnimationDrawCard(_drawCardCount));
                 return;
             }
-            
             if(hit.collider.CompareTag("DiscardArea") && MyTurn && _lastHitCard != null)
             {
                 if (_lastHitCard.IsSelectable)
@@ -68,7 +67,7 @@ public class RealPlayer : Player
         _drawCardCount = cardCount;
 
         if (cardType == CardTypeEnum.DRAW)
-            IsDrawCard = true;    
+            IsDrawCard = true;
         else if (cardType == CardTypeEnum.WILD_DRAW)
             IsWildDraw = true;
     }
@@ -88,17 +87,16 @@ public class RealPlayer : Player
         {
             IsDrawCard = false;
             IsWildDraw = false;
-            TurnManager.NextTurn(this);
+            GameManager.Instance.TurnManager.NextTurn(this);
         }
         else
         {
             IsDraw = false;
-            
             SetSelectableCards();
             if (SelectableCards.Count > 0)
                 ShowSelectableCards();
             else
-                TurnManager.NextTurn(this);
+                GameManager.Instance.TurnManager.NextTurn(this);
         }
     }
 

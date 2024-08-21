@@ -1,5 +1,8 @@
 using DG.Tweening;
+using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,7 +16,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _chooseColorPanel;
     [SerializeField] private Button _redButton, _blueButton, _yellowButton, _greenButton;
     private Button[] buttons = new Button[4];
+ 
+    [Header("Text Effect")]
+    [SerializeField] private Image _textEffectPanel;
+    [SerializeField] private TextMeshProUGUI _text;
 
+    [Header("End Panel")]
+    [SerializeField] private GameObject _endPanel;
+    [SerializeField] private TextMeshProUGUI _wonPlayerName;
+    [SerializeField] private TextMeshProUGUI _wonOrLoss;
+    [SerializeField] private Button _restartButton, _exitButton;
 
     private void Awake()
     {
@@ -25,6 +37,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        _endPanel.SetActive(false);
         buttons[0] = _redButton;
         buttons[1] = _blueButton;
         buttons[2] = _yellowButton;
@@ -53,6 +66,83 @@ public class UIManager : MonoBehaviour
             int colorIndex = 3;
             SetColor(_card, colorIndex);
         });
+
+        _restartButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(0);
+        });
+
+        _exitButton.onClick.AddListener(() =>
+        {
+            Application.Quit();
+        });
+    }
+
+    public void EndGame(Player wonPlayer)
+    {
+        if (wonPlayer.GetType() == typeof(RealPlayer))
+        {
+            _wonOrLoss.text = "Won!";
+            _wonPlayerName.text = "";
+        }
+        else
+        {
+            _wonOrLoss.text = "Loss!";
+            _wonPlayerName.text = $"Winner : {wonPlayer.name}";
+        }
+
+        _endPanel.SetActive(true);
+    }
+
+    public void SetEffectText(Card card)
+    {
+        string text = SetText(card);
+        Color color = SetColor(card);
+        _text.text = text;
+        _textEffectPanel.color = color;
+    }
+
+    private string SetText(Card card)
+    {
+        string text = $"{card.CardName}";
+
+        switch (card.CardTypeEnum)
+        { 
+            case CardTypeEnum.DRAW:
+                DrawCard drawCard = (DrawCard)card;
+                text += $" (+{drawCard.DrawValue})";
+                break;
+            case CardTypeEnum.WILD_DRAW:
+                WildDrawCard wildCard = (WildDrawCard)card;
+                text += $" (+{wildCard.DrawValue})";
+                break;
+        }
+        return text;
+    }
+
+    private Color SetColor(Card card)
+    {
+        Color color = Color.black;
+
+        switch (card.CardColor)
+        {
+            case CardColorEnum.BLUE:
+                color = Color.blue;
+                break;
+            case CardColorEnum.RED:
+                color = Color.red;
+                break;
+            case CardColorEnum.YELLOW:
+                color = Color.yellow;
+                break;
+            case CardColorEnum.GREEN:
+                color = Color.green;
+                break;
+            case CardColorEnum.WILD:
+                color = Color.cyan;
+                break;
+        }
+        return color;
     }
 
     public void OpenChooseColorPanel(RealPlayer player, Card card)
@@ -110,12 +200,12 @@ public class UIManager : MonoBehaviour
         if (card.CardTypeEnum == CardTypeEnum.WILD)
         {
             WildCard wildCard = (WildCard)card;
-            wildCard.ChangeColor(_realPlayer, buttonIndex);
+            StartCoroutine(wildCard.ChangeColor(_realPlayer, buttonIndex));
         }
         else if(card.CardTypeEnum == CardTypeEnum.WILD_DRAW)
         {
             WildDrawCard wildDrawCard = (WildDrawCard)card;
-            wildDrawCard.ChangeColor(_realPlayer, buttonIndex);
+            StartCoroutine(wildDrawCard.ChangeColor(_realPlayer, buttonIndex));
         }
         _card = null;
         AnimationSetColor(buttonIndex);

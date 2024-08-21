@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class WildCard : Card
 {
@@ -6,10 +7,17 @@ public class WildCard : Card
 
     public override void ApplyAction(Player player)
     {
+        base.ApplyAction(player);
+    }
+
+    public override IEnumerator Action(Player player)
+    {
+        yield return null;
+
         if (player.GetType() == typeof(AIPlayer))
         {
             int colorIndex = Random.Range(0, _cardColors.Length);
-            ChangeColor(player, colorIndex);
+            StartCoroutine(ChangeColor(player, colorIndex));
         }
         else
         {
@@ -18,9 +26,13 @@ public class WildCard : Card
         }
     }
 
-    public void ChangeColor(Player player , int colorIndex)
+    public IEnumerator ChangeColor(Player player , int colorIndex)
     {
         this.CardColor = _cardColors[colorIndex];
-        TurnManager.NextTurn(player);
+
+        UIManager.Instance.SetEffectText(this);
+        yield return new WaitForSeconds(0.5f);
+
+        GameManager.Instance.TurnManager.NextTurn(player);
     }
 }

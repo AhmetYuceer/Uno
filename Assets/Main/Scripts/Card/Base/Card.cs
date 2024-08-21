@@ -1,8 +1,10 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public abstract class Card : MonoBehaviour
 {
+    public string CardName {get; set; }
     public bool IsSelectable;
     public bool IsShowable;
     public bool _isDiscarded;
@@ -37,7 +39,14 @@ public abstract class Card : MonoBehaviour
     private Vector3 _defaultScale = Vector3.one;
     private Vector3 _lookedScaleSize = new Vector3(1.3f, 1.3f, 1.3f);
 
-    public virtual void ApplyAction(Player player) { }
+    public virtual void ApplyAction(Player player)
+    {
+        if (!GameManager.Instance.IsPlay)
+            return;
+        StartCoroutine(Action(player));
+    }
+
+    public virtual IEnumerator Action(Player player) { yield return null; }
 
     public void SetOrder(int cardOrder)
     {

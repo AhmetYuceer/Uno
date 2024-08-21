@@ -1,11 +1,21 @@
-using System.Collections.Generic; 
+using UnityEngine;
+using System.Collections.Generic;
 
-public static class TurnManager
+public class TurnManager : MonoBehaviour
 {
-    private static List<Player> _players = new List<Player>();
-    public static TurnDirectionEnum TurnDirection { get; private set; } = TurnDirectionEnum.RIGHT;
+    public static TurnManager Instance;
+    private List<Player> _players = new List<Player>();
+    public TurnDirectionEnum TurnDirection { get; private set; } = TurnDirectionEnum.RIGHT;
 
-    public static void StartTurn(Card firstCard)
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+    
+    public void StartTurn(Card firstCard)
     {
         switch (firstCard.CardTypeEnum)
         {
@@ -24,12 +34,12 @@ public static class TurnManager
         }
     }
 
-    public static void AddPlayer(Player player)
+    public void AddPlayer(Player player)
     {
         _players.Add(player);
     }
  
-    public static void ReverseDirection()
+    public void ReverseDirection()
     {
         switch (TurnDirection)
         {
@@ -42,7 +52,7 @@ public static class TurnManager
         }
     }
 
-    public static void NextTurn(Player currentPlayer)
+    public void NextTurn(Player currentPlayer)
     {
         if (GameManager.Instance.IsPlay)
         {
@@ -52,7 +62,7 @@ public static class TurnManager
         }
     }
 
-    public static Player GetNextPlayerIndex(Player currentPlayer)
+    public Player GetNextPlayerIndex(Player currentPlayer)
     {
         int playerIndex = _players.IndexOf(currentPlayer);
 

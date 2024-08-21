@@ -6,7 +6,7 @@ using DG.Tweening;
 public class DiscardPile : MonoBehaviour
 {
     public static DiscardPile Instance;
-
+    public Card LastDiscardedCard { get; private set; }
     private Transform _discardedCardsTranform;
     private Stack<Card> _discardedCards;
 
@@ -18,6 +18,11 @@ public class DiscardPile : MonoBehaviour
             Destroy(gameObject);
     }
 
+    public Stack<Card> GetAllDiscardedCards()
+    {
+        return _discardedCards;
+    }
+
     public void SetManager(Transform droppedCardsTranform, int droppedCardCapacity)
     {
         _discardedCardsTranform = droppedCardsTranform;
@@ -27,7 +32,7 @@ public class DiscardPile : MonoBehaviour
     public IEnumerator DiscardCard(Card card, Player player)
     {
         _discardedCards.Push(card);
-      
+        LastDiscardedCard = card;
         card.IsDiscarded = true;
         card.IsShowable = false;
         card.IsSelectable = false;
@@ -74,10 +79,5 @@ public class DiscardPile : MonoBehaviour
         int sortingOrder = _discardedCards.Count * 2;
         card.SetOrder(sortingOrder);
         card.StopLookingCard();
-    }
-
-    public Card GetLastDiscardedCard()
-    {
-        return _discardedCards.Peek();
     }
 }
