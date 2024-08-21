@@ -1,3 +1,5 @@
 Unity Version : 2022.3.13f1
 
-Game : https://ahmetyuceer.itch.io/uno 
+Read the complete rules of UNO [here](https://www.unorules.com).
+
+Play the game [here](https://ahmetyuceer.itch.io/uno).  
